@@ -1,46 +1,22 @@
 #include <stdio.h>
-
+#include <malloc.h>
+#include "parser.h"
 #define YOLO 2048
 
-typedef unsigned int u_int;
-typedef unsigned char u_char;
+const char *daFile = "c:/users/lowrider/ClionProjects/playground/test.json";
 
-typedef struct Object_Layer {
-    u_int width, height;
-    u_int id;
-    char* name;
-    char* type;
-    u_char visible;
-    u_int x, y;
-} Object_Layer;
-
-typedef struct Tile_Layer {
-    int *data;
-    u_int height;
-    u_int id;
-    char *name;
-    char *type;
-    u_char visible;
-    int x;
-    int y;
-    Object_Layer *objects;
-} Tile_Layer;
-
-typedef struct Tile_Map {
-    int width, height, tile_width, tile_height;
-    Tile_Layer *layers;
-} Tile_Map;
-
-size_t curr_buffer_size = YOLO;
-const char *daFile = "c:/users/lowrider/ClionProjects/playground/0_0.json";
-
-size_t calcBuffSize(size_t buffer_size, int inc_when_too_small) {
+FILE *getFile(const char *fileName) {
     FILE *file;
-    fopen_s(&file, daFile, "r");
+    fopen_s(&file, fileName, "r");
     if (file == NULL) {
         printf("File not found losah!");
-        return -1;
+        return NULL;
     }
+    return file;
+}
+
+size_t calcBuffSize(size_t buffer_size, int inc_when_too_small) {
+    FILE *file = getFile(daFile);
 
     char buffer_in[YOLO];
     int max = 0, lines = 1;
@@ -71,13 +47,23 @@ size_t calcBuffSize(size_t buffer_size, int inc_when_too_small) {
     return max;
 }
 
-
-void parseMF() {
-
+char *getContent() {
+    char *buffer = NULL;
+    size_t length;
+    FILE *file = getFile(daFile);
+    fseek(file, 0, SEEK_END);
+    length = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    buffer = malloc(length);
+    if (buffer) {
+        fread(buffer, 1, length, file);
+    }
+    return buffer;
 }
 
 int main() {
-    curr_buffer_size = calcBuffSize(1000, 200);
-    parseMF();
+    parser_init(getContent());
+    JSON_Data* data = parser_parse();
+    printf("hmm");
     return 0;
 }

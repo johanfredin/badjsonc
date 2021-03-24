@@ -1,0 +1,26 @@
+{
+  "name": "Johan",
+  "pets": [
+    {
+      "name": "Fido",
+      "type": "Dog",
+      "age": 5
+    },
+    {
+      "name": "Daisy",
+      "type": "Rabbit",
+      "age": 1.50
+    }
+  ],
+  "skip": {
+    "about": "this should be excluded"
+  },
+  "age": 35,
+  "numbers": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "married": true
+}

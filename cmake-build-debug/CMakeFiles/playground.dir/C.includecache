@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lowrider/CLionProjects/playground/parser.c
+vcruntime.h
+-
+string.h
+-
+malloc.h
+-
+stdio.h
+-
+parser.h
+C:/Users/lowrider/CLionProjects/playground/parser.h
+tiled.h
+C:/Users/lowrider/CLionProjects/playground/tiled.h
+
+C:/Users/lowrider/CLionProjects/playground/parser.h
+
+C:/Users/lowrider/CLionProjects/playground/tiled.h
+
