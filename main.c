@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "parser.h"
+
 #define YOLO 2048
 
-const char *daFile = "c:/users/lowrider/ClionProjects/playground/test.json";
+const char *daFile = "c:/users/lowrider/ClionProjects/playground/test_simple.json";
 
 FILE *getFile(const char *fileName) {
     FILE *file;
@@ -55,6 +56,9 @@ char *getContent() {
     length = ftell(file);
     fseek(file, 0, SEEK_SET);
     buffer = malloc(length);
+    for (int i = 0; i < length; i++) {
+        buffer[i] = 0;
+    }
     if (buffer) {
         fread(buffer, 1, length, file);
     }
@@ -62,8 +66,8 @@ char *getContent() {
 }
 
 int main() {
-    parser_init(getContent());
-    JSON_Data* data = parser_parse();
-    printf("hmm");
+    char* content = getContent();
+    parser_init(content);
+    JSON_Data* data = parser_parse2();
     return 0;
 }

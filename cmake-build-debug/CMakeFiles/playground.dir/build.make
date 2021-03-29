@@ -80,28 +80,9 @@ CMakeFiles\playground.dir\main.c.s: cmake_force
  /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoNUL /FAs /FaCMakeFiles\playground.dir\main.c.s /c C:\Users\lowrider\CLionProjects\playground\main.c
 <<
 
-CMakeFiles\playground.dir\parser.c.obj: CMakeFiles\playground.dir\flags.make
-CMakeFiles\playground.dir\parser.c.obj: ..\parser.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lowrider\CLionProjects\playground\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/playground.dir/parser.c.obj"
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe @<<
- /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoCMakeFiles\playground.dir\parser.c.obj /FdCMakeFiles\playground.dir\ /FS -c C:\Users\lowrider\CLionProjects\playground\parser.c
-<<
-
-CMakeFiles\playground.dir\parser.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/playground.dir/parser.c.i"
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe > CMakeFiles\playground.dir\parser.c.i @<<
- /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\lowrider\CLionProjects\playground\parser.c
-<<
-
-CMakeFiles\playground.dir\parser.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/playground.dir/parser.c.s"
-	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe @<<
- /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoNUL /FAs /FaCMakeFiles\playground.dir\parser.c.s /c C:\Users\lowrider\CLionProjects\playground\parser.c
-<<
-
 CMakeFiles\playground.dir\tiled.c.obj: CMakeFiles\playground.dir\flags.make
 CMakeFiles\playground.dir\tiled.c.obj: ..\tiled.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lowrider\CLionProjects\playground\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/playground.dir/tiled.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lowrider\CLionProjects\playground\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/playground.dir/tiled.c.obj"
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe @<<
  /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoCMakeFiles\playground.dir\tiled.c.obj /FdCMakeFiles\playground.dir\ /FS -c C:\Users\lowrider\CLionProjects\playground\tiled.c
 <<
@@ -118,18 +99,37 @@ CMakeFiles\playground.dir\tiled.c.s: cmake_force
  /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoNUL /FAs /FaCMakeFiles\playground.dir\tiled.c.s /c C:\Users\lowrider\CLionProjects\playground\tiled.c
 <<
 
+CMakeFiles\playground.dir\parser2.c.obj: CMakeFiles\playground.dir\flags.make
+CMakeFiles\playground.dir\parser2.c.obj: ..\parser2.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lowrider\CLionProjects\playground\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/playground.dir/parser2.c.obj"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe @<<
+ /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoCMakeFiles\playground.dir\parser2.c.obj /FdCMakeFiles\playground.dir\ /FS -c C:\Users\lowrider\CLionProjects\playground\parser2.c
+<<
+
+CMakeFiles\playground.dir\parser2.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/playground.dir/parser2.c.i"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe > CMakeFiles\playground.dir\parser2.c.i @<<
+ /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\lowrider\CLionProjects\playground\parser2.c
+<<
+
+CMakeFiles\playground.dir\parser2.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/playground.dir/parser2.c.s"
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1428~1.293\bin\Hostx86\x86\cl.exe @<<
+ /nologo $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) /FoNUL /FAs /FaCMakeFiles\playground.dir\parser2.c.s /c C:\Users\lowrider\CLionProjects\playground\parser2.c
+<<
+
 # Object files for target playground
 playground_OBJECTS = \
 "CMakeFiles\playground.dir\main.c.obj" \
-"CMakeFiles\playground.dir\parser.c.obj" \
-"CMakeFiles\playground.dir\tiled.c.obj"
+"CMakeFiles\playground.dir\tiled.c.obj" \
+"CMakeFiles\playground.dir\parser2.c.obj"
 
 # External object files for target playground
 playground_EXTERNAL_OBJECTS =
 
 playground.exe: CMakeFiles\playground.dir\main.c.obj
-playground.exe: CMakeFiles\playground.dir\parser.c.obj
 playground.exe: CMakeFiles\playground.dir\tiled.c.obj
+playground.exe: CMakeFiles\playground.dir\parser2.c.obj
 playground.exe: CMakeFiles\playground.dir\build.make
 playground.exe: CMakeFiles\playground.dir\objects1.rsp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\lowrider\CLionProjects\playground\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable playground.exe"

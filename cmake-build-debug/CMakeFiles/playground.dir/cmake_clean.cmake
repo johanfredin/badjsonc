@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/playground.dir/main.c.obj"
-  "CMakeFiles/playground.dir/parser.c.obj"
+  "CMakeFiles/playground.dir/parser2.c.obj"
   "CMakeFiles/playground.dir/tiled.c.obj"
   "playground.exe"
   "playground.exe.manifest"

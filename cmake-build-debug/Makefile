@@ -154,32 +154,32 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\main.c.s
 .PHONY : main.c.s
 
-parser.obj: parser.c.obj
+parser2.obj: parser2.c.obj
 
-.PHONY : parser.obj
+.PHONY : parser2.obj
 
 # target to build an object file
-parser.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\parser.c.obj
-.PHONY : parser.c.obj
+parser2.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\parser2.c.obj
+.PHONY : parser2.c.obj
 
-parser.i: parser.c.i
+parser2.i: parser2.c.i
 
-.PHONY : parser.i
+.PHONY : parser2.i
 
 # target to preprocess a source file
-parser.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\parser.c.i
-.PHONY : parser.c.i
+parser2.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\parser2.c.i
+.PHONY : parser2.c.i
 
-parser.s: parser.c.s
+parser2.s: parser2.c.s
 
-.PHONY : parser.s
+.PHONY : parser2.s
 
 # target to generate assembly for a file
-parser.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\parser.c.s
-.PHONY : parser.c.s
+parser2.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\playground.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\playground.dir\parser2.c.s
+.PHONY : parser2.c.s
 
 tiled.obj: tiled.c.obj
 
@@ -220,9 +220,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
-	@echo ... parser.obj
-	@echo ... parser.i
-	@echo ... parser.s
+	@echo ... parser2.obj
+	@echo ... parser2.i
+	@echo ... parser2.s
 	@echo ... tiled.obj
 	@echo ... tiled.i
 	@echo ... tiled.s
