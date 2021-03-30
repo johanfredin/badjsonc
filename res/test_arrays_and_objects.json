@@ -1,0 +1,13 @@
+{
+  "name": "Johan",
+  "age": 35,
+  "family": ["Chad", "Olle"],
+  "married": true,
+  "address": {
+    "street": "Cool Street",
+    "zipCode": 12345,
+    "city": "Gotham"
+  },
+  "iq": 12.5,
+  "numbers": [1,2,3,4]
+}

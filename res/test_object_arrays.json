@@ -1,0 +1,47 @@
+{
+  "name": "Johan",
+  "age": 35,
+  "family": [
+    {
+      "name": "Chad",
+      "age": 55,
+      "cool": true,
+      "instruments": [
+        {
+          "Type": "Guitar",
+          "Brand": "Gibson",
+          "Model": "SG",
+          "Devs": [
+            "Greg",
+            "Evelyn"
+          ]
+        },
+        {
+          "Type": "Guitar",
+          "Brand": "Fender",
+          "Model": "Jaguar",
+          "Issue": 1960
+        }
+      ]
+    },
+    {
+      "name": "Olle",
+      "age": 46,
+      "cool": false,
+      "score": 10.66
+    }
+  ],
+  "married": true,
+  "address": {
+    "street": "Cool Street",
+    "zipCode": 12345,
+    "city": "Gotham"
+  },
+  "iq": 12.5,
+  "numbers": [
+    1,
+    2,
+    3,
+    4
+  ]
+}

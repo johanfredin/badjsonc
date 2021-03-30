@@ -17,9 +17,9 @@ void get_array(JSON_Data *);
 void get_object(JSON_Data *);
 void get_number(JSON_Data *);
 void get_bool(JSON_Data *);
-void print_recursive(JSON_Data *root, char* starting_char, int indents);
-JSON_Data *malloc_json_entry();
+void print_recursive(JSON_Data *root, int indents);
 void ff_to_start();
+JSON_Data *malloc_json_entry();
 char skip_irrelevant_chars();
 char *get_numeric_str();
 char *read_until(char end_char, unsigned char include_end_char);
@@ -55,35 +55,42 @@ JSON_Data *parser_parse(char *file_content) {
 
 void parser_print(JSON_Data *root) {
     printf("{\n");
-    print_recursive(root, NULL, 1);
+    print_recursive(root, 2);
     printf("}");
 }
 
-void print_recursive(JSON_Data *root, char* starting_char, int indents) {
-    if (starting_char != NULL) {
-        printf("%s\n", starting_char);
+void print_recursive(JSON_Data *root, int indents) {
+    int i;
+    char padding[32];
+    for(i = 0; i < indents; i++) {
+        padding[i] = ' ';
     }
+    padding[i] = '\0'; // Add null terminator
+
     for (JSON_Data *curr = root; curr != NULL; curr = curr->next) {
+        char* comma = curr->next == NULL ? "" : ",";
+        printf("%s", padding);
         if (curr->key != NULL) {
             printf("\"%s\": ", curr->key);
         }
         // Check value
         if (curr->type.str) {
-            printf("\"%s\",\n", (char *) curr->value);
+            printf("\"%s\"%s\n", (char *) curr->value, comma);
         } else if (curr->type.decimal) {
-            printf("%.2f,\n", *((float *) curr->value));
+            printf("%.2f%s\n", *((float *) curr->value), comma);
         } else if (curr->type.integer) {
-            printf("%i,\n", *((int *) curr->value));
+            printf("%i%s\n", *((int *) curr->value), comma);
         } else if (curr->type.bool) {
-            printf("%s,\n", *((unsigned char *) curr->value) == 1 ? "true" : "false");
+            printf("%s%s\n", *((unsigned char *) curr->value) == 1 ? "true" : "false", comma);
         } else if (curr->type.arr) {
-            print_recursive(curr->child, "[", 0);
+            printf("[\n");
+            print_recursive(curr->child, indents + 2);
+            printf("%s]%s\n", padding, comma);
         } else if (curr->type.obj) {
-            print_recursive(curr->child, "{", 0);
+            printf("{\n");
+            print_recursive(curr->child, indents + 2);
+            printf("%s}%s\n", padding, comma);
         }
-    }
-    if (starting_char != NULL) {
-        printf("%s\n", strcmp(starting_char, "{") == 0 ? "},\n" : "],\n");
     }
 }
 
