@@ -6,12 +6,12 @@
 #define PSX_SPIKE_PARSER_H
 
 typedef struct {
-    int integer:1;
-    int decimal:1;
-    int str:1;
-    int bool:1;
-    int arr:1;
-    int obj:1;
+    unsigned char integer:1;
+    unsigned char decimal:1;
+    unsigned char str:1;
+    unsigned char bool:1;
+    unsigned char arr:1;
+    unsigned char obj:1;
 } Type;
 
 typedef struct JSON_Data{

@@ -12,21 +12,22 @@ unsigned int idx = 0;
 char *content = NULL;
 
 void get_value(JSON_Data *);
-void get_str(JSON_Data* entry, unsigned char type);
-void get_array(JSON_Data*);
-void get_object(JSON_Data*);
-void get_number(JSON_Data*);
-void get_bool(JSON_Data*);
-JSON_Data* malloc_json_entry();
+void get_str(JSON_Data *entry, unsigned char type);
+void get_array(JSON_Data *);
+void get_object(JSON_Data *);
+void get_number(JSON_Data *);
+void get_bool(JSON_Data *);
+void print_recursive(JSON_Data *root, char* starting_char, int indents);
+JSON_Data *malloc_json_entry();
 void ff_to_start();
 char skip_irrelevant_chars();
 char *get_numeric_str();
-char* read_until(char end_char, unsigned char include_end_char);
+char *read_until(char end_char, unsigned char include_end_char);
 char curr_ch();
 char next_ch();
 unsigned char is_num();
 
-JSON_Data *parser_parse(char* file_content) {
+JSON_Data *parser_parse(char *file_content) {
     content = file_content;
     JSON_Data *root, *curr;
     root = malloc_json_entry();
@@ -52,6 +53,40 @@ JSON_Data *parser_parse(char* file_content) {
     return root;
 }
 
+void parser_print(JSON_Data *root) {
+    printf("{\n");
+    print_recursive(root, NULL, 1);
+    printf("}");
+}
+
+void print_recursive(JSON_Data *root, char* starting_char, int indents) {
+    if (starting_char != NULL) {
+        printf("%s\n", starting_char);
+    }
+    for (JSON_Data *curr = root; curr != NULL; curr = curr->next) {
+        if (curr->key != NULL) {
+            printf("\"%s\": ", curr->key);
+        }
+        // Check value
+        if (curr->type.str) {
+            printf("\"%s\",\n", (char *) curr->value);
+        } else if (curr->type.decimal) {
+            printf("%.2f,\n", *((float *) curr->value));
+        } else if (curr->type.integer) {
+            printf("%i,\n", *((int *) curr->value));
+        } else if (curr->type.bool) {
+            printf("%s,\n", *((unsigned char *) curr->value) == 1 ? "true" : "false");
+        } else if (curr->type.arr) {
+            print_recursive(curr->child, "[", 0);
+        } else if (curr->type.obj) {
+            print_recursive(curr->child, "{", 0);
+        }
+    }
+    if (starting_char != NULL) {
+        printf("%s\n", strcmp(starting_char, "{") == 0 ? "},\n" : "],\n");
+    }
+}
+
 void get_value(JSON_Data *entry) {
     char c = curr_ch();
     if (c == '\"') {
@@ -75,14 +110,14 @@ void get_value(JSON_Data *entry) {
     }
 }
 
-void get_str(JSON_Data* entry, unsigned char type) {
+void get_str(JSON_Data *entry, unsigned char type) {
     if (curr_ch() == '\"') {
         next_ch();
     }
-    char* str = read_until('\"', 0);
-    if(type == 'k') {
+    char *str = read_until('\"', 0);
+    if (type == 'k') {
         entry->key = str;
-    } else if(type == 'v') {
+    } else if (type == 'v') {
         entry->value = str;
         entry->type.str = 1;
     } else {
@@ -93,9 +128,9 @@ void get_str(JSON_Data* entry, unsigned char type) {
 
 void get_number(JSON_Data *entry) {
     char *num_str = get_numeric_str();
-    float* f_ptr;
-    int* i_ptr;
-    if(strchr(num_str, '.')) {
+    float *f_ptr;
+    int *i_ptr;
+    if (strchr(num_str, '.')) {
         f_ptr = malloc(sizeof(float));
         *f_ptr = strtof(num_str, NULL);
         entry->value = f_ptr;
@@ -109,10 +144,10 @@ void get_number(JSON_Data *entry) {
     free(num_str);
 }
 
-void get_bool(JSON_Data* entry) {
-    char* str_bool = read_until('e', 1);   // true and false both end at 'e'
+void get_bool(JSON_Data *entry) {
+    char *str_bool = read_until('e', 1);   // true and false both end at 'e'
     unsigned char *bool_ptr = malloc(sizeof(unsigned char));
-    if(strcmp(str_bool, "true") == 0) {
+    if (strcmp(str_bool, "true") == 0) {
         *bool_ptr = 1;
     } else {
         *bool_ptr = 0;
@@ -123,18 +158,18 @@ void get_bool(JSON_Data* entry) {
     entry->type.bool = 1;
 }
 
-void get_array(JSON_Data* entry) {
+void get_array(JSON_Data *entry) {
     char c = curr_ch();
-    JSON_Data* root = malloc_json_entry();
-    JSON_Data* curr = root;
+    JSON_Data *root = malloc_json_entry();
+    JSON_Data *curr = root;
     entry->type.arr = 1;
     while (c != ']') {
-        JSON_Data* next = NULL;
+        JSON_Data *next = NULL;
         skip_irrelevant_chars();
         get_value(curr);
         c = skip_irrelevant_chars();
 
-        if(c == ']') {
+        if (c == ']') {
             break;
         }
         next = malloc_json_entry();
@@ -145,20 +180,20 @@ void get_array(JSON_Data* entry) {
     next_ch(); // So that we iterate past the last ] char
 }
 
-void get_object(JSON_Data* entry) {
+void get_object(JSON_Data *entry) {
     char c = curr_ch();
-    JSON_Data* root = malloc_json_entry();
-    JSON_Data* curr = root;
+    JSON_Data *root = malloc_json_entry();
+    JSON_Data *curr = root;
     entry->type.obj = 1;
     while (c != '}') {
-        JSON_Data* next = NULL;
+        JSON_Data *next = NULL;
         skip_irrelevant_chars();
         get_str(curr, 'k');
         skip_irrelevant_chars();
         get_value(curr);
         c = skip_irrelevant_chars();
 
-        if(c == '}') {
+        if (c == '}') {
             break;
         }
 
@@ -170,7 +205,7 @@ void get_object(JSON_Data* entry) {
     next_ch(); // So that we iterate past the last } char
 }
 
-JSON_Data* malloc_json_entry() {
+JSON_Data *malloc_json_entry() {
     Type zeroType = {0, 0, 0, 0, 0, 0};
     JSON_Data *data = malloc(sizeof(JSON_Data));
     data->key = NULL;
@@ -181,7 +216,7 @@ JSON_Data* malloc_json_entry() {
     return data;
 }
 
-char* read_until(char end_char, unsigned char include_end_char) {
+char *read_until(char end_char, unsigned char include_end_char) {
     char *str = calloc(32, sizeof(char));
     int i = 0;
     char c = curr_ch();
@@ -190,7 +225,7 @@ char* read_until(char end_char, unsigned char include_end_char) {
         c = next_ch();
         i++;
     }
-    if(include_end_char) {
+    if (include_end_char) {
         str[i] = end_char;
         i++;
     }
@@ -244,7 +279,7 @@ char curr_ch() {
 }
 
 char next_ch() {
-    if(curr_ch() == '\0') {
+    if (curr_ch() == '\0') {
         return curr_ch();
     }
     return content[++idx];

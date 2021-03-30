@@ -6,17 +6,19 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/lowrider/CLionProjects/playground/filereader.h
+C:/Users/lowrider/CLionProjects/playground/parser.c
+vcruntime.h
+-
+malloc.h
+-
+string.h
+-
+stdlib.h
+-
 stdio.h
 -
-
-C:/Users/lowrider/CLionProjects/playground/main.c
 parser.h
 C:/Users/lowrider/CLionProjects/playground/parser.h
-filereader.h
-C:/Users/lowrider/CLionProjects/playground/filereader.h
-direct.h
--
 
 C:/Users/lowrider/CLionProjects/playground/parser.h
 
