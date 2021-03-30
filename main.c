@@ -4,7 +4,7 @@
 
 #define YOLO 2048
 
-const char *daFile = "c:/users/lowrider/ClionProjects/playground/test_simple.json";
+const char *daFile = "c:/users/lowrider/ClionProjects/playground/test_medium.json";
 
 FILE *getFile(const char *fileName) {
     FILE *file;
@@ -66,8 +66,8 @@ char *getContent() {
 }
 
 int main() {
-    char* content = getContent();
+    char *content = getContent();
     parser_init(content);
-    JSON_Data* data = parser_parse2();
+    JSON_Data *data = parser_parse2();
     return 0;
 }
