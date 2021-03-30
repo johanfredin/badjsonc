@@ -82,13 +82,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/lowrider/CLionProjects/playground/filereader.c">
+			<Option target="playground"/>
+		</Unit>
+		<Unit filename="C:/Users/lowrider/CLionProjects/playground/filereader.h">
+			<Option target="playground"/>
+		</Unit>
 		<Unit filename="C:/Users/lowrider/CLionProjects/playground/main.c">
 			<Option target="playground"/>
 		</Unit>
-		<Unit filename="C:/Users/lowrider/CLionProjects/playground/parser.h">
+		<Unit filename="C:/Users/lowrider/CLionProjects/playground/parser.c">
 			<Option target="playground"/>
 		</Unit>
-		<Unit filename="C:/Users/lowrider/CLionProjects/playground/parser2.c">
+		<Unit filename="C:/Users/lowrider/CLionProjects/playground/parser.h">
 			<Option target="playground"/>
 		</Unit>
 		<Unit filename="C:/Users/lowrider/CLionProjects/playground/tiled.c">

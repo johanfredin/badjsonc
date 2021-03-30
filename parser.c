@@ -1,92 +1,217 @@
 //
-// Created by lowrider on 2021-03-22.
+// Created by lowrider on 2021-03-28.
 //
 #include <vcruntime.h>
-#include <string.h>
 #include <malloc.h>
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "parser.h"
-#include "tiled.h"
 
-typedef unsigned int u_int;
-typedef unsigned char u_char;
-
-u_int idx = 0;
+unsigned int idx = 0;
 char *content = NULL;
-JSON_Data *map;
 
-u_int ff_to_start();
-
-void *get_value();
-
-char *get_str();
-
+void get_value(JSON_Data *);
+void get_str(JSON_Data* entry, unsigned char type);
+void get_array(JSON_Data*);
+void get_object(JSON_Data*);
+void get_number(JSON_Data*);
+void get_bool(JSON_Data*);
+JSON_Data* malloc_json_entry();
+void ff_to_start();
 char skip_irrelevant_chars();
-
+char *get_numeric_str();
+char* read_until(char end_char, unsigned char include_end_char);
 char curr_ch();
-
 char next_ch();
+unsigned char is_num();
 
-void *get_array();
-
-JSON_Data *get_object();
-
-void *get_num();
-
-u_char *get_bool();
-
-u_char is_num();
-
-void parser_init(char *file_content) {
+JSON_Data *parser_parse(char* file_content) {
     content = file_content;
-}
-
-JSON_Data *parser_parse() {
-    idx = ff_to_start();
-    u_int count = 0;
-    JSON_Data* data = calloc(500, sizeof(JSON_Data));
+    JSON_Data *root, *curr;
+    root = malloc_json_entry();
+    curr = root;
+    ff_to_start();
     while (content[idx] != '\0') {
-        JSON_Data entry = data[count];
         skip_irrelevant_chars();
-        if (idx == strlen(content) - 1 && curr_ch() == '}') {
+
+        get_str(curr, 'k');
+        skip_irrelevant_chars();
+        get_value(curr);
+
+        // Go to next if we have not reached the end yet
+        unsigned int nextIdx = idx + 1;
+        char nextChar = content[nextIdx];
+        if (nextChar == '\0' || (nextChar == '}' && content[++nextIdx] == '\0')) {
             break;
         }
-        entry.key = get_str();
-        entry.value = get_value();
-        printf("Key=%s, value=%s\n", entry.key, (char*) entry.value);
-        count++;
+        curr->next = malloc_json_entry();
+        curr = curr->next;
         idx++;
     }
-    return data;
+    return root;
 }
 
-void *get_value() {
+void get_value(JSON_Data *entry) {
     char c = curr_ch();
-    void *value;
     if (c == '\"') {
-        idx++;
-        value = get_str();
+        get_str(entry, 'v');
     } else if (c == '[') {
         idx++;
         skip_irrelevant_chars();
-        value = get_array();
+        get_array(entry);
     } else if (c == '{') {
         idx++;
         skip_irrelevant_chars();
-        value = get_object();
+        get_object(entry);
     } else if (is_num()) {
-        value = get_num();
+        get_number(entry);
     } else if (c == 't' || c == 'f') {
-        value = get_bool();
+        get_bool(entry);
     } else {
         idx++;
         skip_irrelevant_chars();
-        value = get_value();
+        get_value(entry);
     }
-    return value;
 }
 
-u_char is_num() {
+void get_str(JSON_Data* entry, unsigned char type) {
+    if (curr_ch() == '\"') {
+        next_ch();
+    }
+    char* str = read_until('\"', 0);
+    if(type == 'k') {
+        entry->key = str;
+    } else if(type == 'v') {
+        entry->value = str;
+        entry->type.str = 1;
+    } else {
+        printf("ERR, value=%c not one of 'k', 'v'\n", type);
+        exit(1);
+    }
+}
+
+void get_number(JSON_Data *entry) {
+    char *num_str = get_numeric_str();
+    float* f_ptr;
+    int* i_ptr;
+    if(strchr(num_str, '.')) {
+        f_ptr = malloc(sizeof(float));
+        *f_ptr = strtof(num_str, NULL);
+        entry->value = f_ptr;
+        entry->type.decimal = 1;
+    } else {
+        i_ptr = malloc(sizeof(int));
+        *i_ptr = strtol(num_str, NULL, 10);
+        entry->value = i_ptr;
+        entry->type.integer = 1;
+    }
+    free(num_str);
+}
+
+void get_bool(JSON_Data* entry) {
+    char* str_bool = read_until('e', 1);   // true and false both end at 'e'
+    unsigned char *bool_ptr = malloc(sizeof(unsigned char));
+    if(strcmp(str_bool, "true") == 0) {
+        *bool_ptr = 1;
+    } else {
+        *bool_ptr = 0;
+    }
+    free(str_bool);
+    str_bool = NULL;
+    entry->value = bool_ptr;
+    entry->type.bool = 1;
+}
+
+void get_array(JSON_Data* entry) {
+    char c = curr_ch();
+    JSON_Data* root = malloc_json_entry();
+    JSON_Data* curr = root;
+    entry->type.arr = 1;
+    while (c != ']') {
+        JSON_Data* next = NULL;
+        skip_irrelevant_chars();
+        get_value(curr);
+        c = skip_irrelevant_chars();
+
+        if(c == ']') {
+            break;
+        }
+        next = malloc_json_entry();
+        curr->next = next;
+        curr = curr->next;
+    }
+    entry->child = root;
+    next_ch(); // So that we iterate past the last ] char
+}
+
+void get_object(JSON_Data* entry) {
+    char c = curr_ch();
+    JSON_Data* root = malloc_json_entry();
+    JSON_Data* curr = root;
+    entry->type.obj = 1;
+    while (c != '}') {
+        JSON_Data* next = NULL;
+        skip_irrelevant_chars();
+        get_str(curr, 'k');
+        skip_irrelevant_chars();
+        get_value(curr);
+        c = skip_irrelevant_chars();
+
+        if(c == '}') {
+            break;
+        }
+
+        next = malloc_json_entry();
+        curr->next = next;
+        curr = curr->next;
+    }
+    entry->child = root;
+    next_ch(); // So that we iterate past the last } char
+}
+
+JSON_Data* malloc_json_entry() {
+    Type zeroType = {0, 0, 0, 0, 0, 0};
+    JSON_Data *data = malloc(sizeof(JSON_Data));
+    data->key = NULL;
+    data->value = NULL;
+    data->next = NULL;
+    data->child = NULL;
+    data->type = zeroType;
+    return data;
+}
+
+char* read_until(char end_char, unsigned char include_end_char) {
+    char *str = calloc(32, sizeof(char));
+    int i = 0;
+    char c = curr_ch();
+    while (c != end_char) {
+        str[i] = c;
+        c = next_ch();
+        i++;
+    }
+    if(include_end_char) {
+        str[i] = end_char;
+        i++;
+    }
+    str[i] = '\0';
+    next_ch(); // So that we iterate past the last " char
+    return str;
+}
+
+char *get_numeric_str() {
+    int i = 0;
+    char *str = calloc(15, sizeof(char));
+    while (is_num()) {
+        str[i] = curr_ch();
+        next_ch();
+        i++;
+    }
+    str[i] = '\0';
+    return str;
+}
+
+unsigned char is_num() {
     char c = curr_ch();
     int i;
     char numbers[] = "0123456789.\0";
@@ -98,99 +223,12 @@ u_char is_num() {
     return 0;
 }
 
-u_char *get_bool() {
-    u_char* bool_ptr = malloc(sizeof(u_char));
-    *bool_ptr = 0;
-    if(curr_ch() == 't') {
-        *bool_ptr = 1;
-    }
-    return bool_ptr;
-}
-
-void *get_num() {
-    int i = 0, is_int = 1;
-    void* num_ptr = malloc(sizeof(float));
-    char value[15];
-    while (is_num()) {
-        value[i] = curr_ch();
-        next_ch();
-        i++;
-    }
-    value[i] = '\0';
-
-    for (i = 0; i < 15 && value[i] != '\0'; i++) {
-        if(value[i] == '.') {
-            num_ptr = (float*) value;
-            is_int = 0;
-        }
-    }
-
-    if (is_int) {
-        num_ptr = (int*) value;
-    }
-
-    return num_ptr;
-}
-
-JSON_Data *get_object() {
-    JSON_Data* data = calloc(50, sizeof(JSON_Data));
-    int count = 0;
-    char* key;
-    void* value;
-    char c = curr_ch();
-    while (c != '}') {
-        JSON_Data entry = data[count];
-        skip_irrelevant_chars();
-        key = get_str();
-        skip_irrelevant_chars();
-        value = get_value();
-        entry.key = key;
-        entry.value = value;
-        c = skip_irrelevant_chars();
-        count++;
-    }
-    next_ch(); // So that we iterate past the last } char
-    return data;
-}
-
-void *get_array() {
-    int i = 0;
-    char c = curr_ch();
-    void** array = calloc(100, sizeof(int));
-    while (c != ']') {
-        skip_irrelevant_chars();
-        array[i] = get_value();
-        c = skip_irrelevant_chars();
-    }
-    next_ch(); // So that we iterate past the last ] char
-    return array;
-}
-
-char *get_str() {
-    char* key = calloc(32, sizeof(char));
-    int i = 0;
-    char c = curr_ch();
-    if (c == '\"') {
-        c = next_ch();
-    }
-
-    while (c != '\"') {
-        key[i] = c;
-        c = next_ch();
-        i++;
-    }
-    key[i] = '\0';
-    next_ch(); // So that we iterate past the last " char
-    return key;
-}
-
-u_int ff_to_start() {
+void ff_to_start() {
     while (content[idx] != '\0') {
         if (content[idx++] == '{') {
-            return idx;
+            return;
         }
     }
-    return 0;
 }
 
 char skip_irrelevant_chars() {
@@ -206,5 +244,8 @@ char curr_ch() {
 }
 
 char next_ch() {
+    if(curr_ch() == '\0') {
+        return curr_ch();
+    }
     return content[++idx];
 }

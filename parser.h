@@ -5,15 +5,13 @@
 #ifndef PSX_SPIKE_PARSER_H
 #define PSX_SPIKE_PARSER_H
 
-typedef unsigned char u_char;
-
 typedef struct {
-    u_char integer:1;
-    u_char decimal:1;
-    u_char str:1;
-    u_char bool:1;
-    u_char arr:1;
-    u_char obj:1;
+    int integer:1;
+    int decimal:1;
+    int str:1;
+    int bool:1;
+    int arr:1;
+    int obj:1;
 } Type;
 
 typedef struct JSON_Data{
@@ -24,8 +22,7 @@ typedef struct JSON_Data{
     struct JSON_Data* child;
 } JSON_Data;
 
-void parser_init(char* file_content);
-JSON_Data* parser_parse();
-JSON_Data* parser_parse2();
+JSON_Data* parser_parse(char* file_content);
+void parser_print(JSON_Data* data);
 
 #endif //PSX_SPIKE_PARSER_H
