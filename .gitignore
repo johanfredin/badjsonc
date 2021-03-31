@@ -1,0 +1,7 @@
+*.idea
+cmake-build-debug/CMakeFiles
+cmake-build-debug/Testing
+*.exe
+*.ilk
+*.pdb
+*.cbp
