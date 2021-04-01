@@ -19,7 +19,6 @@ typedef struct JSON_Data{
     void* value;
     Type type;
     struct JSON_Data* next;
-    struct JSON_Data* child;
 } JSON_Data;
 
 JSON_Data* parser_parse(char* file_content);

@@ -84,11 +84,11 @@ void print_recursive(JSON_Data *root, int indents) {
             printf("%s%s\n", *((unsigned char *) curr->value) == 1 ? "true" : "false", comma);
         } else if (curr->type.arr) {
             printf("[\n");
-            print_recursive(curr->child, indents + 2);
+            print_recursive((JSON_Data*) curr->value, indents + 2);
             printf("%s]%s\n", padding, comma);
         } else if (curr->type.obj) {
             printf("{\n");
-            print_recursive(curr->child, indents + 2);
+            print_recursive((JSON_Data*) curr->value, indents + 2);
             printf("%s}%s\n", padding, comma);
         }
     }
@@ -183,7 +183,7 @@ void get_array(JSON_Data *entry) {
         curr->next = next;
         curr = curr->next;
     }
-    entry->child = root;
+    entry->value = root;
     next_ch(); // So that we iterate past the last ] char
 }
 
@@ -208,7 +208,7 @@ void get_object(JSON_Data *entry) {
         curr->next = next;
         curr = curr->next;
     }
-    entry->child = root;
+    entry->value = root;
     next_ch(); // So that we iterate past the last } char
 }
 
@@ -218,7 +218,6 @@ JSON_Data *malloc_json_entry() {
     data->key = NULL;
     data->value = NULL;
     data->next = NULL;
-    data->child = NULL;
     data->type = zeroType;
     return data;
 }
