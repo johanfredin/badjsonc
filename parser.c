@@ -229,7 +229,7 @@ JSON_Data *malloc_json_entry() {
 }
 
 char *read_until(char end_char, unsigned char include_end_char) {
-    const size_t size = 32;
+    const size_t size = 100;
     char *str = calloc(size, sizeof(char));
 
     int i = 0;
