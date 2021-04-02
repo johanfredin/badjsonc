@@ -1,7 +1,6 @@
 {
   "name": "Johan",
   "age": 35,
-  "married": true,
-  "iq": 12.5,
-  "numbers": [1,2,3,4]
+  "numbers": [1,2,3,4],
+  "married": true
 }

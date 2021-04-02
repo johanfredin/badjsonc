@@ -63,7 +63,7 @@ char *get_content(const char* fileName) {
     FILE *file = get_file(fileName);
     printf("File=%s retrieved\n", fileName);
     fseeko(file, 0, SEEK_END);
-    length = ftello(file);   // Reserved for null terminator
+    length = ftello(file) + 1;   // Reserved for null terminator
     fseeko(file, 0, SEEK_SET);
     buffer = malloc(length);
     int i;

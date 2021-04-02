@@ -1,5 +1,6 @@
 *.idea
 cmake-build-debug/CMakeFiles
+cmake-build-debug/badjson
 cmake-build-debug/Testing
 *.exe
 *.ilk

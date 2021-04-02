@@ -57,12 +57,33 @@ JSON_Data *parser_parse(char *file_content) {
     return root;
 }
 
-
 void parser_print(JSON_Data *root) {
     printf("{\n");
     print_recursive(root, 2);
     printf("}");
 }
+
+void parser_free(JSON_Data *root) {
+    JSON_Data *curr = root;
+    unsigned char nested;
+    while(curr != NULL) {
+        JSON_Data* aux;
+        nested = curr->type.arr | curr->type.obj;
+        if (nested) {
+            parser_free((JSON_Data *) curr->value);
+        }
+        aux = curr;
+        curr = curr->next;
+        if(nested) {
+            aux->value = NULL;
+        } else {
+            FREE_AND_NULL(aux->value);
+        }
+        FREE_AND_NULL(aux->key);
+        FREE_AND_NULL(aux);
+    }
+}
+
 
 void print_recursive(JSON_Data *root, int indents) {
     int i;
@@ -238,7 +259,7 @@ char *read_until(char end_char, unsigned char include_end_char) {
         str[i] = c;
         c = next_ch();
 
-        if(i >= size) {
+        if (i >= size) {
             printf("ERROR: String exceeded max length of %li, accumulated string=%s\n", size, str);
             exit(1);
         }
