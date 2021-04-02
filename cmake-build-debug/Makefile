@@ -48,24 +48,13 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/c/Users/lowrider/CLionProjects/playground
+CMAKE_SOURCE_DIR = /mnt/c/Users/lowrider/CLionProjects/badjson
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/c/Users/lowrider/CLionProjects/playground/cmake-build-debug
+CMAKE_BINARY_DIR = /mnt/c/Users/lowrider/CLionProjects/badjson/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -78,11 +67,22 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lowrider/CLionProjects/playground/cmake-build-debug/CMakeFiles /mnt/c/Users/lowrider/CLionProjects/playground/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lowrider/CLionProjects/badjson/cmake-build-debug/CMakeFiles /mnt/c/Users/lowrider/CLionProjects/badjson/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lowrider/CLionProjects/playground/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/lowrider/CLionProjects/badjson/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named playground
+# Target rules for targets named badjson
 
 # Build rule for target.
-playground: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 playground
-.PHONY : playground
+badjson: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 badjson
+.PHONY : badjson
 
 # fast build rule for target.
-playground/fast:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/build
-.PHONY : playground/fast
+badjson/fast:
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/build
+.PHONY : badjson/fast
 
 filereader.o: filereader.c.o
 
@@ -129,7 +129,7 @@ filereader.o: filereader.c.o
 
 # target to build an object file
 filereader.c.o:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/filereader.c.o
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/filereader.c.o
 .PHONY : filereader.c.o
 
 filereader.i: filereader.c.i
@@ -138,7 +138,7 @@ filereader.i: filereader.c.i
 
 # target to preprocess a source file
 filereader.c.i:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/filereader.c.i
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/filereader.c.i
 .PHONY : filereader.c.i
 
 filereader.s: filereader.c.s
@@ -147,7 +147,7 @@ filereader.s: filereader.c.s
 
 # target to generate assembly for a file
 filereader.c.s:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/filereader.c.s
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/filereader.c.s
 .PHONY : filereader.c.s
 
 main.o: main.c.o
@@ -156,7 +156,7 @@ main.o: main.c.o
 
 # target to build an object file
 main.c.o:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/main.c.o
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -165,7 +165,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/main.c.i
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -174,7 +174,7 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/main.c.s
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/main.c.s
 .PHONY : main.c.s
 
 parser.o: parser.c.o
@@ -183,7 +183,7 @@ parser.o: parser.c.o
 
 # target to build an object file
 parser.c.o:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/parser.c.o
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/parser.c.o
 .PHONY : parser.c.o
 
 parser.i: parser.c.i
@@ -192,7 +192,7 @@ parser.i: parser.c.i
 
 # target to preprocess a source file
 parser.c.i:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/parser.c.i
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/parser.c.i
 .PHONY : parser.c.i
 
 parser.s: parser.c.s
@@ -201,7 +201,7 @@ parser.s: parser.c.s
 
 # target to generate assembly for a file
 parser.c.s:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/parser.c.s
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/parser.c.s
 .PHONY : parser.c.s
 
 tiled.o: tiled.c.o
@@ -210,7 +210,7 @@ tiled.o: tiled.c.o
 
 # target to build an object file
 tiled.c.o:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/tiled.c.o
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/tiled.c.o
 .PHONY : tiled.c.o
 
 tiled.i: tiled.c.i
@@ -219,7 +219,7 @@ tiled.i: tiled.c.i
 
 # target to preprocess a source file
 tiled.c.i:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/tiled.c.i
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/tiled.c.i
 .PHONY : tiled.c.i
 
 tiled.s: tiled.c.s
@@ -228,7 +228,7 @@ tiled.s: tiled.c.s
 
 # target to generate assembly for a file
 tiled.c.s:
-	$(MAKE) -f CMakeFiles/playground.dir/build.make CMakeFiles/playground.dir/tiled.c.s
+	$(MAKE) -f CMakeFiles/badjson.dir/build.make CMakeFiles/badjson.dir/tiled.c.s
 .PHONY : tiled.c.s
 
 # Help Target
@@ -237,9 +237,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... playground"
+	@echo "... rebuild_cache"
+	@echo "... badjson"
 	@echo "... filereader.o"
 	@echo "... filereader.i"
 	@echo "... filereader.s"
