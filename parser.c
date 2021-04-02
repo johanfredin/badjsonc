@@ -1,8 +1,6 @@
 //
 // Created by lowrider on 2021-03-28.
 //
-#include <vcruntime.h>
-#include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,30 +26,37 @@ char next_ch();
 unsigned char is_num();
 
 JSON_Data *parser_parse(char *file_content) {
-    content = file_content;
+    // Calc length of content
     JSON_Data *root, *curr;
+    int content_length = 0;
+    STR_LEN(content_length, file_content)
+
+    content = file_content;
     root = malloc_json_entry();
     curr = root;
     ff_to_start();
-    while (content[idx] != '\0') {
+    while (idx < content_length) {
         skip_irrelevant_chars();
 
         get_str(curr, 'k');
         skip_irrelevant_chars();
         get_value(curr);
+        skip_irrelevant_chars();
 
         // Go to next if we have not reached the end yet
         unsigned int nextIdx = idx + 1;
         char nextChar = content[nextIdx];
-        if (nextChar == '\0' || (nextChar == '}' && content[++nextIdx] == '\0')) {
+        if (nextIdx >= content_length || nextChar == '\0' || (nextChar == '}' && content[++nextIdx] == '\0')) {
             break;
         }
         curr->next = malloc_json_entry();
         curr = curr->next;
+        skip_irrelevant_chars();
         idx++;
     }
     return root;
 }
+
 
 void parser_print(JSON_Data *root) {
     printf("{\n");
@@ -61,14 +66,15 @@ void parser_print(JSON_Data *root) {
 
 void print_recursive(JSON_Data *root, int indents) {
     int i;
+    JSON_Data *curr;
     char padding[32];
-    for(i = 0; i < indents; i++) {
+    for (i = 0; i < indents; i++) {
         padding[i] = ' ';
     }
     padding[i] = '\0'; // Add null terminator
 
-    for (JSON_Data *curr = root; curr != NULL; curr = curr->next) {
-        char* comma = curr->next == NULL ? "" : ",";
+    for (curr = root; curr != NULL; curr = curr->next) {
+        char *comma = curr->next == NULL ? "" : ",";
         printf("%s", padding);
         if (curr->key != NULL) {
             printf("\"%s\": ", curr->key);
@@ -84,11 +90,11 @@ void print_recursive(JSON_Data *root, int indents) {
             printf("%s%s\n", *((unsigned char *) curr->value) == 1 ? "true" : "false", comma);
         } else if (curr->type.arr) {
             printf("[\n");
-            print_recursive((JSON_Data*) curr->value, indents + 2);
+            print_recursive((JSON_Data *) curr->value, indents + 2);
             printf("%s]%s\n", padding, comma);
         } else if (curr->type.obj) {
             printf("{\n");
-            print_recursive((JSON_Data*) curr->value, indents + 2);
+            print_recursive((JSON_Data *) curr->value, indents + 2);
             printf("%s}%s\n", padding, comma);
         }
     }
@@ -144,7 +150,7 @@ void get_number(JSON_Data *entry) {
         entry->type.decimal = 1;
     } else {
         i_ptr = malloc(sizeof(int));
-        *i_ptr = strtol(num_str, NULL, 10);
+        *i_ptr = (int) strtol(num_str, NULL, 10);
         entry->value = i_ptr;
         entry->type.integer = 1;
     }
@@ -223,12 +229,20 @@ JSON_Data *malloc_json_entry() {
 }
 
 char *read_until(char end_char, unsigned char include_end_char) {
-    char *str = calloc(32, sizeof(char));
+    const size_t size = 32;
+    char *str = calloc(size, sizeof(char));
+
     int i = 0;
     char c = curr_ch();
     while (c != end_char) {
         str[i] = c;
         c = next_ch();
+
+        if(i >= size) {
+            printf("ERROR: String exceeded max length of %li, accumulated string=%s\n", size, str);
+            exit(1);
+        }
+
         i++;
     }
     if (include_end_char) {

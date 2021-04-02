@@ -3,14 +3,24 @@
 //
 
 #include <malloc.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include "filereader.h"
 
 FILE *get_file(const char *fileName) {
+    char* absPath;
+    char cwd[150];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("Current working dir: %s\n", cwd);
+    }
+
+    absPath = strcat(cwd, fileName);
     FILE *file;
-    fopen_s(&file, fileName, "r");
+    file = fopen(absPath, "r");
     if (file == NULL) {
-        printf("File not found losah!");
-        return NULL;
+        printf("File='%s' not found!", absPath);
+        exit(1);
     }
     return file;
 }
@@ -34,7 +44,7 @@ size_t calc_buff(const char *fileName, size_t buffer_size, int inc_when_too_smal
 
             // Check if we reached last index and still not at null terminator
             if (i == BUFFER - 1) {
-                printf("Buffer size=%d exceeded at line %d, incrementing....\n", buffer_size, lines);
+                printf("Buffer size=%li exceeded at line %d, incrementing....\n", buffer_size, lines);
                 fclose(file);
                 return calc_buff(fileName, buffer_size + inc_when_too_small, inc_when_too_small);
             }
@@ -51,15 +61,19 @@ char *get_content(const char* fileName) {
     char *buffer = NULL;
     size_t length;
     FILE *file = get_file(fileName);
-    fseek(file, 0, SEEK_END);
-    length = ftell(file);
-    fseek(file, 0, SEEK_SET);
+    printf("File=%s retrieved\n", fileName);
+    fseeko(file, 0, SEEK_END);
+    length = ftello(file);   // Reserved for null terminator
+    fseeko(file, 0, SEEK_SET);
     buffer = malloc(length);
-    for (int i = 0; i < length; i++) {
+    int i;
+    for (i = 0; i < length; i++) {
         buffer[i] = 0;
     }
     if (buffer) {
         fread(buffer, 1, length, file);
+        buffer[length - 1] = '\0';
     }
+
     return buffer;
 }
