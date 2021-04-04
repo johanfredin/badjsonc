@@ -8,7 +8,7 @@
 #include <string.h>
 #include "tiled.h"
 
-void add_layer(Tile_Map *pMap, JSON_Data *data);
+void add_layers(Tile_Map *tm, JSON_Data *jobj_root);
 
 #define STREQ(str1, str2) strcmp(str1, str2) == 0
 
@@ -32,53 +32,55 @@ Tile_Map *tiled_populate_from_json(JSON_Data *root) {
         } else if (STREQ(key, "tilewidth")) {
             tm->tile_width = *(int *) value;
         } else if (STREQ(key, "layers")) {
-            add_layer(tm, (JSON_Data *) value);
+            // Linked list of json objects found
+            add_layers(tm, (JSON_Data *) value);
         }
     }
     return tm;
 }
 
-void add_layer(Tile_Map *tm, JSON_Data *data) {
-    Tile_Layer *root_tl = malloc(sizeof(Tile_Layer));;
-    Tile_Layer *curr_tl;
-    for (curr_tl = root_tl; data != NULL; data = data->next) {
+void add_layers(Tile_Map *tm, JSON_Data *jobj_root) {
+    Tile_Layer *tl_root = malloc(sizeof(Tile_Layer));
+    JSON_Data *jobj_curr;
+    Tile_Layer *tl_curr;
 
-        char *key = data->key;
-        void *value = data->value;
+    for (jobj_curr = jobj_root, tl_curr = tl_root; jobj_curr != NULL; jobj_curr = jobj_curr->next) {
+        JSON_Data *curr_layer;
+        for (curr_layer = (JSON_Data *) jobj_curr->value; curr_layer != NULL; curr_layer = curr_layer->next) {
+            char* key = curr_layer->key;
+            void* value = curr_layer->value;
 
-        if (STREQ(key, "color")) {
-            data = data->next;
+            if (STREQ(key, "objects")) {
+//            jobj_root = jobj_root->next;
+//            continue;
+            } else if (STREQ(key, "data")) {
+//            root_tl->jobj_root =
+            } else if (STREQ(key, "height")) {
+                tl_curr->height = *(int *) value;
+            } else if (STREQ(key, "id")) {
+                tl_curr->id = *(int *) value;
+            } else if (STREQ(key, "name")) {
+                tl_curr->name = (char *) value;
+            } else if (STREQ(key, "type")) {
+                tl_curr->type = (char *) value;
+            } else if (STREQ(key, "visible")) {
+                tl_curr->visible = *(u_char *) value;
+            } else if (STREQ(key, "width")) {
+                tl_curr->width = *(int *) value;
+            } else if (STREQ(key, "x")) {
+                tl_curr->x = *(int *) value;
+            } else if (STREQ(key, "y")) {
+                tl_curr->y = *(int *) value;
+            }
+        }
+
+        if (jobj_curr->next == NULL) {
+            tl_curr->next = NULL;
             continue;
         }
 
-        if (STREQ(key, "data")) {
-//            root_tl->data =
-        } else if (STREQ(key, "height")) {
-            curr_tl->height = *(int *) value;
-        } else if (STREQ(key, "id")) {
-            curr_tl->id = *(int *) value;
-        } else if (STREQ(key, "name")) {
-            curr_tl->name = (char *) value;
-        } else if (STREQ(key, "type")) {
-            curr_tl->type = (char *) value;
-        } else if (STREQ(key, "visible")) {
-            curr_tl->visible = *(u_char *) value;
-        } else if (STREQ(key, "width")) {
-            curr_tl->width = *(int *) value;
-        } else if (STREQ(key, "x")) {
-            curr_tl->x = *(int *) value;
-        } else if (STREQ(key, "y")) {
-            curr_tl->y = *(int *) value;
-        }
-
-        // Check if we should create a new list entry
-        Tile_Layer *next;
-        if(data->next != NULL) {
-            next = malloc(sizeof(Tile_Layer));
-        } else {
-            next = NULL;
-        }
-        curr_tl->next = next;
+        tl_curr->next = malloc(sizeof(Tile_Layer));
+        tl_curr = tl_curr->next;
     }
-    tm->layers = root_tl;
+    tm->layers = tl_root;
 }
