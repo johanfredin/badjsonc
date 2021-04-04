@@ -65,16 +65,16 @@ void parser_print(JSON_Data *root) {
 
 void parser_free(JSON_Data *root) {
     JSON_Data *curr = root;
-    unsigned char nested;
+    unsigned char is_nested;
     while(curr != NULL) {
         JSON_Data* aux;
-        nested = curr->type.arr | curr->type.obj;
-        if (nested) {
+        is_nested = curr->type.arr | curr->type.obj;
+        if (is_nested) {
             parser_free((JSON_Data *) curr->value);
         }
         aux = curr;
         curr = curr->next;
-        if(nested) {
+        if(is_nested) {
             aux->value = NULL;
         } else {
             FREE_AND_NULL(aux->value);
@@ -83,7 +83,6 @@ void parser_free(JSON_Data *root) {
         FREE_AND_NULL(aux);
     }
 }
-
 
 void print_recursive(JSON_Data *root, int indents) {
     int i;
@@ -181,11 +180,7 @@ void get_number(JSON_Data *entry) {
 void get_bool(JSON_Data *entry) {
     char *str_bool = read_until('e', 1);   // true and false both end at 'e'
     unsigned char *bool_ptr = malloc(sizeof(unsigned char));
-    if (strcmp(str_bool, "true") == 0) {
-        *bool_ptr = 1;
-    } else {
-        *bool_ptr = 0;
-    }
+    *bool_ptr = strcmp(str_bool, "true") == 0 ? 1 : 0;
     free(str_bool);
     str_bool = NULL;
     entry->value = bool_ptr;
@@ -206,6 +201,7 @@ void get_array(JSON_Data *entry) {
         if (c == ']') {
             break;
         }
+
         next = malloc_json_entry();
         curr->next = next;
         curr = curr->next;
@@ -250,17 +246,17 @@ JSON_Data *malloc_json_entry() {
 }
 
 char *read_until(char end_char, unsigned char include_end_char) {
-    const size_t size = 100;
+    const unsigned char size = 100;
     char *str = calloc(size, sizeof(char));
 
-    int i = 0;
+    unsigned char i = 0;
     char c = curr_ch();
     while (c != end_char) {
         str[i] = c;
         c = next_ch();
 
         if (i >= size) {
-            printf("ERROR: String exceeded max length of %li, accumulated string=%s\n", size, str);
+            printf("ERROR: String exceeded max length of %i, accumulated string=%s\n", size, str);
             exit(1);
         }
 
@@ -276,11 +272,16 @@ char *read_until(char end_char, unsigned char include_end_char) {
 }
 
 char *get_numeric_str() {
-    int i = 0;
-    char *str = calloc(15, sizeof(char));
+    const unsigned char size = 15;
+    unsigned char i = 0;
+    char *str = calloc(size, sizeof(char));
     while (is_num()) {
         str[i] = curr_ch();
         next_ch();
+        if (i >= size) {
+            printf("ERROR: Numeric string exceeded max length of %i, accumulated string=%s\n", size, str);
+            exit(1);
+        }
         i++;
     }
     str[i] = '\0';
@@ -289,7 +290,7 @@ char *get_numeric_str() {
 
 unsigned char is_num() {
     char c = curr_ch();
-    int i;
+    unsigned char i;
     char numbers[] = "0123456789.\0";
     for (i = 0; numbers[i] != '\0'; i++) {
         if (numbers[i] == c) {

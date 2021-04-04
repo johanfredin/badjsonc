@@ -9,10 +9,10 @@
 
 #define BUFFER 2048
 
-FILE *get_file(const char *fileName);
+FILE *fr_get_file(const char *fileName);
 
-size_t calc_buff(const char *fileName, size_t buffer_size, int inc_when_too_small);
+size_t fr_calc_buff(const char *fileName, size_t buffer_size, int inc_when_too_small);
 
-char *get_content(const char *fileName);
+char *fr_get_content(const char *fileName);
 
 #endif //PSX_SPIKE_FILEREADER_H
