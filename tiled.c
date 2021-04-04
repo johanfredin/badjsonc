@@ -7,10 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tiled.h"
+#include "utils.h"
 
 void add_layers(Tile_Map *tm, JSON_Data *jobj_root);
-
-#define STREQ(str1, str2) strcmp(str1, str2) == 0
+void add_data(Tile_Layer *layer, JSON_Data *root);
 
 Tile_Map *tiled_populate_from_json(JSON_Data *root) {
     JSON_Data *curr;
@@ -47,14 +47,14 @@ void add_layers(Tile_Map *tm, JSON_Data *jobj_root) {
     for (jobj_curr = jobj_root, tl_curr = tl_root; jobj_curr != NULL; jobj_curr = jobj_curr->next) {
         JSON_Data *curr_layer;
         for (curr_layer = (JSON_Data *) jobj_curr->value; curr_layer != NULL; curr_layer = curr_layer->next) {
-            char* key = curr_layer->key;
-            void* value = curr_layer->value;
+            char *key = curr_layer->key;
+            void *value = curr_layer->value;
 
             if (STREQ(key, "objects")) {
 //            jobj_root = jobj_root->next;
 //            continue;
             } else if (STREQ(key, "data")) {
-//            root_tl->jobj_root =
+                add_data(tl_curr, (JSON_Data *) value);
             } else if (STREQ(key, "height")) {
                 tl_curr->height = *(int *) value;
             } else if (STREQ(key, "id")) {
@@ -73,14 +73,24 @@ void add_layers(Tile_Map *tm, JSON_Data *jobj_root) {
                 tl_curr->y = *(int *) value;
             }
         }
-
-        if (jobj_curr->next == NULL) {
-            tl_curr->next = NULL;
-            continue;
-        }
-
-        tl_curr->next = malloc(sizeof(Tile_Layer));
-        tl_curr = tl_curr->next;
+        MALLOC_IF_NEXT_NOT_NULL(jobj_curr, tl_curr, Tile_Layer)
     }
     tm->layers = tl_root;
+}
+
+void add_data(Tile_Layer *layer, JSON_Data *root) {
+    Layer_Data *data_root = malloc(sizeof(Layer_Data));
+    Layer_Data *data = data_root;
+    JSON_Data *curr;
+    for (curr = root; curr != NULL; curr = curr->next) {
+        data->id = *(u_short *) curr->value;
+        MALLOC_IF_NEXT_NOT_NULL(curr, data, Layer_Data)
+//        if (curr->next == NULL) {
+//            data->next = NULL;
+//            continue;
+//        }
+//        data->next = malloc(sizeof(Layer_Data));
+//        data = data->next;
+    }
+    layer->data = data_root;
 }

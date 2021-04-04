@@ -8,6 +8,7 @@
 #include "parser.h"
 
 typedef unsigned int u_int;
+typedef unsigned short u_short;
 typedef unsigned char u_char;
 
 typedef struct Object_Layer {
@@ -20,12 +21,18 @@ typedef struct Object_Layer {
     struct Object_Layer *next;
 } Object_Layer;
 
+typedef struct Layer_Data {
+    u_short id;
+    struct Layer_Data *next;
+} Layer_Data;
+
 typedef struct Tile_Layer {
-    int *data;
+    Layer_Data *data;
     u_int height, width, id;
     char *name, *type;
     u_char visible;
     int x, y;
+    u_short data_count;
     struct Tile_Layer *next;
 } Tile_Layer;
 

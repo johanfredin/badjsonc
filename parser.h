@@ -5,8 +5,7 @@
 #ifndef PSX_SPIKE_PARSER_H
 #define PSX_SPIKE_PARSER_H
 
-#define STR_LEN(i, str) while ((char) str[i] != '\0') i++;
-#define FREE_AND_NULL(ptr) if(ptr != NULL) free(ptr); ptr = NULL
+#include "utils.h"
 
 typedef struct {
     unsigned char integer: 1;
