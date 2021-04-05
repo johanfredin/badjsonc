@@ -11,7 +11,16 @@
 
 #define FREE_AND_NULL(ptr) if(ptr != NULL) free(ptr); ptr = NULL
 
-#define MALLOC_IF_NEXT_NOT_NULL(ptr_to_check, curr_entry, ptr_type)     \
+/**
+ * Create another entry in the linked list we are creating if the linked
+ * list we are iterating has a next entry. This macro depends on both
+ * ptr_to_check and curr_entry to be linked list entries with a *next pointer
+ * property in them.
+ * @param ptr_to_check the current entry in the linked list we are iterating
+ * @param curr_entry the current entry in the linked list we are creating
+ * @param ptr_type the type of the curr_entry
+ */
+#define MALLOC_AND_MOVE_TO_NEXT_IF_MORE_DATA(ptr_to_check, curr_entry, ptr_type)     \
     if (ptr_to_check->next == NULL) {                                   \
         curr_entry->next = NULL;                                        \
     } else {                                                            \

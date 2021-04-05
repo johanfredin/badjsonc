@@ -1,0 +1,43 @@
+{ "compressionlevel":-1,
+ "height":4,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[5, 5, 6, 7, 5, 37, 38, 39, 37, 69, 70, 71, 69, 69, 70, 71],
+         "height":4,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":2,
+         "name":"bounds",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":3,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.4.3",
+ "tileheight":12,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"..\/..\/..\/..\/..\/psyq\/projects\/psx-dev\/projects\/from-scratch\/assets\/tilemaps\/L1\/tinySLATES [16x16px orthogonal tileset by Ivan Voirol].tsx"
+        }],
+ "tilewidth":12,
+ "type":"map",
+ "version":1.4,
+ "width":4
+}

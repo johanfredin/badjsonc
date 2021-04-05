@@ -51,7 +51,7 @@
          "draworder":"topdown",
          "id":4,
          "name":"bounds",
-         "objects":[
+           "objects":[
                 {
                  "height":24,
                  "id":6,
