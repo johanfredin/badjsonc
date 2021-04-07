@@ -29,7 +29,7 @@ JSON_Data *parser_parse(char *file_content) {
     // Calc length of content
     JSON_Data *root, *curr;
     int content_length = 0;
-    STR_LEN(content_length, file_content)
+    STR_LEN(content_length, file_content);
 
     content = file_content;
     root = malloc_json_entry();

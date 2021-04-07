@@ -11,6 +11,11 @@ typedef unsigned int u_int;
 typedef unsigned short u_short;
 typedef unsigned char u_char;
 
+typedef enum Object_Layer_Type {
+    BOUNDS,
+    TELEPORTS
+} Object_Layer_Type;
+
 typedef struct Object_Layer {
     u_int width, height;
     u_int id;
@@ -40,6 +45,17 @@ typedef struct Tile_Map {
     Object_Layer *bounds, *teleports;
 } Tile_Map;
 
+/**
+ * Populates a new Tile_Map type from JSON data received. This function allocates
+ * memory and must be either freed manually or by calling #tiled_free
+ * @param root root entry in the JSON Data linked list
+ * @return a Tile_Map struct allocated on the heap.
+ */
 Tile_Map *tiled_populate_from_json(JSON_Data* root);
+/**
+ * Frees all the allocated memory in linked list passed in.
+ * @param tm tm entry of linked list
+ */
+void tiled_free(Tile_Map* tm);
 
 #endif //PSX_SPIKE_TILED_H

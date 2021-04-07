@@ -8,11 +8,6 @@
 #include <string.h>
 #include "tiled.h"
 
-typedef enum Object_Layer_Type {
-    BOUNDS,
-    TELEPORTS
-} Object_Layer_Type ;
-
 void add_tile_layers_to_map(Tile_Map *tm, JSON_Data *jobj_root);
 void add_data_to_layer(Tile_Layer *layer, JSON_Data *root);
 void add_object_layers_to_map(Tile_Map *tm, JSON_Data *root, Object_Layer_Type type);
@@ -44,10 +39,25 @@ Tile_Map *tiled_populate_from_json(JSON_Data *root) {
     return tm;
 }
 
+void tiled_free(Tile_Map *tm) {
+    Tile_Layer *tile_layer;
+    tile_layer = tm->layers;
+    while (tile_layer != NULL) {
+        Tile_Layer *aux;
+        aux = tile_layer;
+        tile_layer = tile_layer->next;
+        FREE_LINKED_LIST(aux->data, Layer_Data);
+        FREE_AND_NULL(aux);
+    }
+    FREE_LINKED_LIST(tm->bounds, Object_Layer);
+    FREE_LINKED_LIST(tm->teleports, Object_Layer);
+    FREE_AND_NULL(tm);
+}
+
 void add_tile_layers_to_map(Tile_Map *tm, JSON_Data *jobj_root) {
     Tile_Layer *tl_root = malloc(sizeof(Tile_Layer));
     JSON_Data *jobj_curr;
-    Tile_Layer *tl_curr;
+    Tile_Layer *tl_curr, *tl_prev;
 
     for (jobj_curr = jobj_root, tl_curr = tl_root; jobj_curr != NULL; jobj_curr = jobj_curr->next) {
         JSON_Data *curr_layer;
@@ -69,8 +79,16 @@ void add_tile_layers_to_map(Tile_Map *tm, JSON_Data *jobj_root) {
                     while (!(STREQ(curr_layer->key, "objects"))) {
                         curr_layer = curr_layer->next;
                     }
+                    // Value should now be at objects root
                     value = curr_layer->value;  // Sync
-                    add_object_layers_to_map(tm, (JSON_Data *) value, is_bounds ? BOUNDS : TELEPORTS);  // Value should now be at objects root
+                    add_object_layers_to_map(
+                            tm,
+                            (JSON_Data *) value,
+                            is_bounds ? BOUNDS : TELEPORTS
+                    );
+                    FREE_AND_NULL(tl_curr);
+                    tl_curr = tl_prev;
+
                 } else {
                     tl_curr->name = (char *) value;
                 }
@@ -86,11 +104,17 @@ void add_tile_layers_to_map(Tile_Map *tm, JSON_Data *jobj_root) {
                 tl_curr->y = *(int *) value;
             }
         }
-        MALLOC_AND_MOVE_TO_NEXT_IF_MORE_DATA(jobj_curr, tl_curr, Tile_Layer)
+        Tile_Layer *next = NULL;
+        if (jobj_curr->next != NULL) {
+            next = malloc(sizeof(Tile_Layer));
+        }
+        tl_curr->next = next;
+        tl_prev = tl_curr;
+        tl_curr = next;
+
     }
     tm->layers = tl_root;
 }
-
 
 void add_object_layers_to_map(Tile_Map *tm, JSON_Data *root, Object_Layer_Type type) {
     Object_Layer *ol_root, *ol_curr; // Our object layers linked list
@@ -108,7 +132,7 @@ void add_object_layers_to_map(Tile_Map *tm, JSON_Data *root, Object_Layer_Type t
                 ol_curr->height = *(u_int *) value;
             } else if (STREQ(key, "id")) {
                 ol_curr->id = *(u_int *) value;
-            }else if (STREQ(key, "visible")) {
+            } else if (STREQ(key, "visible")) {
                 ol_curr->visible = *(u_char *) value;
             } else if (STREQ(key, "width")) {
                 ol_curr->width = *(u_int *) value;
