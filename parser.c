@@ -15,6 +15,7 @@ void get_array(JSON_Data *);
 void get_object(JSON_Data *);
 void get_number(JSON_Data *);
 void get_bool(JSON_Data *);
+void print_json_data(JSON_Data *root);
 void print_recursive(JSON_Data *root, int indents);
 void ff_to_start();
 JSON_Data *malloc_json_entry();
@@ -25,7 +26,7 @@ char curr_ch();
 char next_ch();
 unsigned char is_num();
 
-JSON_Data *parser_parse(char *file_content) {
+JSON_Data *parser_parse(char *file_content, unsigned char print_result) {
     // Calc length of content
     JSON_Data *root, *curr;
     int content_length = 0;
@@ -54,10 +55,13 @@ JSON_Data *parser_parse(char *file_content) {
         skip_irrelevant_chars();
         idx++;
     }
+    if (print_result) {
+        print_json_data(root);
+    }
     return root;
 }
 
-void parser_print(JSON_Data *root) {
+void print_json_data(JSON_Data *root) {
     printf("{\n");
     print_recursive(root, 2);
     printf("}");

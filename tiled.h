@@ -35,7 +35,6 @@ typedef struct Tile_Layer {
     char *name, *type;
     u_char visible;
     int x, y;
-    u_short data_count;
     struct Tile_Layer *next;
 } Tile_Layer;
 
@@ -49,13 +48,14 @@ typedef struct Tile_Map {
  * Populates a new Tile_Map type from JSON data received. This function allocates
  * memory and must be either freed manually or by calling #tiled_free
  * @param root root entry in the JSON Data linked list
+ * @param print_result whether or not to printf the resulting structure
  * @return a Tile_Map struct allocated on the heap.
  */
-Tile_Map *tiled_populate_from_json(JSON_Data* root);
+Tile_Map *tiled_populate_from_json(JSON_Data *root, unsigned char print_result);
 /**
  * Frees all the allocated memory in linked list passed in.
  * @param tm tm entry of linked list
  */
-void tiled_free(Tile_Map* tm);
+void tiled_free(Tile_Map *tm);
 
 #endif //PSX_SPIKE_TILED_H

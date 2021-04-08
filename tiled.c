@@ -12,7 +12,9 @@ void add_tile_layers_to_map(Tile_Map *tm, JSON_Data *jobj_root);
 void add_data_to_layer(Tile_Layer *layer, JSON_Data *root);
 void add_object_layers_to_map(Tile_Map *tm, JSON_Data *root, Object_Layer_Type type);
 
-Tile_Map *tiled_populate_from_json(JSON_Data *root) {
+void print_tiled_map(Tile_Map *map);
+
+Tile_Map *tiled_populate_from_json(JSON_Data *root, unsigned char print_result) {
     JSON_Data *curr;
     Tile_Map *tm;
     if (root == NULL) {
@@ -36,8 +38,66 @@ Tile_Map *tiled_populate_from_json(JSON_Data *root) {
             add_tile_layers_to_map(tm, (JSON_Data *) value);
         }
     }
+    if (print_result) {
+        print_tiled_map(tm);
+    }
+
     return tm;
 }
+
+void print_tiled_map(Tile_Map *map) {
+    Tile_Layer *tile_layer;
+    Object_Layer *bounds_layer, *teleports_layer;
+    printf("Map parsed from JSON\n");
+    printf("--------------------\n");
+    printf("{\n");
+    printf("  width=%d\n", map->width);
+    printf("  height=%d\n", map->height);
+    printf("  tile_width=%d\n", map->tile_width);
+    printf("  tile_height=%d\n", map->tile_height);
+    printf("  layers=[\n");
+    for (tile_layer = map->layers; tile_layer != NULL; tile_layer = tile_layer->next) {
+        printf("    {\n");
+        printf("      name=%s\n", tile_layer->name);
+        printf("      type=%s\n", tile_layer->type);
+        printf("      id=%d\n", tile_layer->id);
+        printf("      x=%d\n", tile_layer->x);
+        printf("      y=%d\n", tile_layer->y);
+        printf("      width=%d\n", tile_layer->width);
+        printf("      height=%d\n", tile_layer->height);
+        printf("      visible=%d\n", tile_layer->visible);
+        printf("    }\n");
+    }
+    printf("  ]\n");
+    printf("  bounds=[\n");
+    for (bounds_layer = map->bounds; bounds_layer != NULL; bounds_layer = bounds_layer->next) {
+        printf("    {\n");
+        printf("      id=%d\n", bounds_layer->id);
+        printf("      visible=%d\n", bounds_layer->visible);
+        printf("      x=%d\n", bounds_layer->x);
+        printf("      y=%d\n", bounds_layer->y);
+        printf("      width=%d\n", bounds_layer->width);
+        printf("      height=%d\n", bounds_layer->height);
+        printf("      visible=%d\n", bounds_layer->visible);
+        printf("    }\n");
+    }
+    printf("  ]\n");
+    printf("  teleports=[\n");
+    for (teleports_layer = map->teleports; teleports_layer != NULL; teleports_layer = teleports_layer->next) {
+        printf("    {\n");
+        printf("      id=%d\n", teleports_layer->id);
+        printf("      visible=%d\n", teleports_layer->visible);
+        printf("      x=%d\n", teleports_layer->x);
+        printf("      y=%d\n", teleports_layer->y);
+        printf("      width=%d\n", teleports_layer->width);
+        printf("      height=%d\n", teleports_layer->height);
+        printf("      visible=%d\n", teleports_layer->visible);
+        printf("    }\n");
+    }
+    printf("  ]\n");
+    printf("}\n");
+}
+
 
 void tiled_free(Tile_Map *tm) {
     Tile_Layer *tile_layer;
@@ -163,5 +223,4 @@ void add_data_to_layer(Tile_Layer *layer, JSON_Data *root) {
         data_count++;
     }
     layer->data = data_root;
-    layer->data_count = data_count;
 }

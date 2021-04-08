@@ -23,8 +23,7 @@ typedef struct JSON_Data {
     struct JSON_Data *next;
 } JSON_Data;
 
-JSON_Data *parser_parse(char *file_content);
-void parser_print(JSON_Data *root);
+JSON_Data *parser_parse(char *file_content, unsigned char print_result);
 void parser_free(JSON_Data *root);
 
 #endif //PSX_SPIKE_PARSER_H
